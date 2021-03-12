@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="/css/me.css">
+    <title>使用者登入</title>
+</head>
+<body>
+<!--中間內容-->
+<div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
+    <div class="ui container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal image header">
+                    <div class="content">
+                        登入
+                    </div>
+                </h2>
+                <form class="ui large form" th:action="@{/login}" method="Post">
+                    <div class="ui segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="email" placeholder="請輸入信箱" th:value="${email}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" name="password" placeholder="請輸入密碼">
+                            </div>
+                        </div>
+                        <button class="ui fluid large teal submit button">登入</button>
+                    </div>
+                    <div class="ui error message"></div>
+                                                        <!--unless=if的反意 -->
+                    <div class="ui mini negative message" th:unless="${#strings.isEmpty(errorMessage)}" th:text="${errorMessage}"></div>
+                    <div class="ui mini positive message" th:unless="${#strings.isEmpty(positiveMessage)}" th:text="${positiveMessage}"></div>
+                </form>
+                <div class="ui message">
+                    還沒有帳號? <a href="#" th:href="@{/signup}">註冊</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.form')
+        .form({
+            fields: {
+                email: {
+                    identifier: 'email',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: '請輸入信箱'
+                        }
+                    ]
+                },
+                userPassword: {
+                    identifier: 'userPassword',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: '請輸入密碼'
+                        }
+                    ]
+                }
+            }
+        });
+</script>
+</body>
+</html>

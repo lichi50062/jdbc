@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/lib/prism/prism.css">
+    <link rel="stylesheet" href="/css/me.css">
+    <title>部落格</title>
+</head>
+<body>
+<!--nav-->
+<nav class="ui inverted attached segment m-padded-tb-mini">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">Blog</h2>
+            <a href="#" th:href="@{/}" class="active m-item item m-mobile-hide"><i class="home icon"></i>首頁</a>
+            <a href="#" th:href="@{/types}" class="m-item item m-mobile-hide"><i class="idea icon"></i>分類</a>
+            <a href="#" th:href="@{/tags}" class="m-item item m-mobile-hide"><i class="tags icon"></i>標籤</a>
+            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide"><i class="clone icon"></i>存檔</a>
+            <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide"><i class="info icon"></i>後台</a>
+            <a href="#" th:href="@{/login}" class="m-item item m-mobile-hide"><i class="info icon"></i>登入</a>
+            <div class="right m-item item m-mobile-hide">
+                <form name="search" action="#" th:action="@{/search}" method="post" target="_blank">
+                    <div class="ui icon inverted transparent input m-margin-tb-tiny">
+                        <input type="text" name="query" placeholder="Search...." th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+                <div class="ui dropdown item" th:if="${session.user!=null}">
+                    <div class="text" th:if="${session.user!=null}">
+                        <img class="ui avatar image" th:src="@{${session.user.avatar}}" alt="" src="">
+                    </div>
+                    <div th:if="${session.user!=null}" th:text="${session.user.username}"></div>
+                    <i class="dropdown icon"> </i>
+                    <div class="menu">
+                        <a th:href="@{/logout}" class="item">登出</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<!--中間內容-->
+<div class="m-container m-padded-tb-big animate__animated animate__pulse">
+    <div class="ui container">
+        <div class="ui top attached segment">
+            <div class="ui horizontal link list">
+                <div class="item">
+                    <img src="https://source.unsplash.com/random" th:src="@{${blog.user.avatar}}" alt=""
+                         class="ui avatar image">
+                    <div class="content"><a href="#" class="header" th:text="${blog.user.username}"></a></div>
+                </div>
+                <div class="item">
+                    <i class="calendar icon"> </i><span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd')}"></span>
+                </div>
+                <div class="item">
+                    <i class="eye icon"></i><span th:text="${blog.views}">111</span>
+                </div>
+            </div>
+        </div>
+        <div class="ui attached segment">
+            <!--圖片區域-->
+            <img src="https://source.unsplash.com/random" alt="" th:src="@{${blog.firstPicture}}"
+                 class="ui fluid image">
+        </div>
+        <div class="ui attached segment">
+            <!--內容-->
+            <h2 class="ui center aligned header" th:text="${blog.title}"></h2>
+            <div id="content" class="m-padded-tb-lr-responsive m-padded-tb-large" th:utext="${blog.content}">
+                <pre class=" language-js">
+                    <code class=" language-js">
+public static void main(String[] args) {
+    System.out.println("Test Prism");
+    }
+                  </code>
+                </pre>
+                <p>asssssssssssssssssssssssss</p>
+            </div>
+            <!--標籤-->
+            <div class="m-padded-tb-lr-responsive">
+                <div class="ui basic teal label left pointing" th:each="tag : ${blog.tags}" >
+                    <a th:href="@{/tag/{id}(id=${tag.id})}" th:text="${tag.tagName}"></a>
+                </div>
+            </div>
+        </div>
+        <div class="ui attached positive message">
+            <!--blog訊息-->
+            <div class="ui middle aligned grid">
+                <div class="eleven wide column">
+                    <ui class="list">
+                        <li><span th:text="${blog.user.username}"></span></li>
+                        <li> <span th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd HH:mm')}"></span></li>
+                    </ui>
+                </div>
+            </div>
+        </div>
+        <div class="ui bottom attached segment" th:if="${blog.commentable}">
+            <!--留言區-->
+            <div id="comment-container" class="ui teal segment">
+                <!--動態更新用fragment-->
+                <div th:fragment="commentList">
+                    <div class="ui threaded comments">
+                        <h3 class="ui dividing header"></h3>
+                        <div class="comment" th:each="comment : ${commentList}">
+                            <a class="avatar">
+                                <img src="https://source.unsplash.com/WLUHO9A_xik" th:src="@{${comment.avatar}}">
+                            </a>
+                            <div class="content">
+                                <a class="author">
+                                    <span th:text="${comment.nickname}"></span>
+                                    <div class="ui basic teal label" th:if="${comment.adminComment}">作者</div>
+                                </a>
+                                <div class="metadata">
+                                    <span class="date" th:text="${#dates.format(comment.createTime,'yyyy-MM-dd HH:mm')}"></span>
+                                </div>
+                                <div class="text" th:text="${comment.content}">
+                                    1111
+                                </div>
+                                <div class="actions">
+                                    <a class="reply" date-commentid="1" date-commentnickname="Matt"
+                                       th:attr="data-commentid=${comment.id},data-commentnickname=${comment.nickname}"
+                                       onclick="reply(this)">留言</a>
+                                </div>
+                            </div>
+                            <div class="comments" th:if="${#arrays.length(comment.childComments)}>0">
+                                <div class="comment" th:each="childComment : ${comment.childComments}">
+                                    <a class="avatar">
+                                        <img src="https://source.unsplash.com/WLUHO9A_xik" th:src="@{${childComment.avatar}}">
+                                    </a>
+                                    <div class="content">
+                                        <a class="author">
+                                            <span th:text="${childComment.nickname}"></span>
+                                            <div class="ui basic teal label" th:if="${childComment.adminComment}">作者</div>
+                                            &nbsp;<span th:text="|@${childComment.parentComment.nickname}|" class="m-teal">@</span>
+                                        </a>
+                                        <div class="metadata">
+                                    <span class="date" th:text="${#dates.format(childComment.createTime,'yyyy-MM-dd HH:mm')}"></span>
+                                        </div>
+                                        <div class="text" th:text="${childComment.content}">
+                                            2222
+                                        </div>
+                                        <div class="actions">
+                                            <a class="reply" date-commentid="1" date-commentnickname="Matt"
+                                               th:attr="data-commentid=${childComment.id},data-commentnickname=${childComment.nickname}"
+                                               onclick="reply(this)">留言</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="comment-form" class="ui form">
+                <input type="hidden" name="blog.id" th:value="${blog.id}">
+                <input type="hidden" name="parentComment.id" value="-1">
+                <div class="field">
+                    <textarea name="content" placeholder="請輸入內容" id="" cols="30" rows="10"></textarea>
+                </div>
+                <div class="fields">
+                    <div class="field m-mobile-wide m-marge-bottom-small">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input type="text" name="nickname" placeholder="姓名" th:value="${session.user}!=null ? ${session.user.username}">
+                        </div>
+                    </div>
+                    <div class="field m-mobile-wide m-marge-bottom-small">
+                        <button id="commentpost-btn" type="button" class="ui m-mobile-wide teal button">送出</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+<script src="/lib/prism/prism.js"></script>
+
+<!--thymeleaf要在javascript取值要加inline-->
+<script th:inline="javascript">
+    $('.menu-toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-show');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+
+    $('.ui.form').form({
+        fields: {
+            title: {
+                identifier: 'content',
+                rules: [{
+                    type: 'empty',
+                    prompt: '請輸入留言內容'
+                }]
+            },
+            content: {
+                identifier: 'nickname',
+                rules: [{
+                    type: 'empty',
+                    prompt: '請輸入姓名'
+                }]
+            },
+        }
+    });
+
+    //留言完成後載入
+    $(function () {
+        $("#comment-container").load(/*[[@{/comments/{id}(id=${blog.id})}]]*/);
+    });
+
+    //驗證留言是否為空
+    $('#commentpost-btn').click(function () {
+        const boo = $('.ui.form').form('validate form');
+        if (boo) {
+            console.log('驗證成功');
+            postData();
+        } else {
+            console.log('驗證失敗');
+        }
+    });
+
+    //post到CommentController /comments
+    function postData() {
+        $("#comment-container").load(/*[[@{/comments}]]*/"", {
+            "parentComment.id": $("[name='parentComment.id']").val(),
+            "blog.id": $("[name='blog.id']").val(),
+            "nickname": $("[name='nickname']").val(),
+            "content": $("[name='content']").val()
+        }, function (responseTxt, statusTxt, xhr) {
+            $(window).scrollTo($('#comment-container'),500);
+            clearContent();
+        });
+    }
+
+    function clearContent() {
+        $("[name='content']").val('');
+        $("[name='parentComment.id']").val(-1);
+        $("[name='content']").attr("placeholder", "請輸入留言...");
+    }
+
+    //回復留言
+    function reply(obj) {
+        //date大寫拿不到
+        const commentId = $(obj).data('commentid');
+        const commentnickname = $(obj).data('commentnickname');
+        $("[name='content']").attr("placeholder", "@" + commentnickname).focus();
+        $("[name='parentComment.id']").val(commentId);
+        $(window).scrollTo($('#comment-form'), 500);
+    }
+</script>
+</body>
+</html>

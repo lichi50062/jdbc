@@ -1,0 +1,18 @@
+{
+  "properties": [
+    {
+      "name": "spring.profiles.security.oauth2.client.registration.google.client-secret",
+      "type": "java.lang.String",
+      "description": "Description for spring.profiles.security.oauth2.client.registration.google.client-secret."
+    },
+    {
+      "name": "google.client.accessTokenUri",
+      "type": "java.lang.String",
+      "description": "Description for google.client.accessTokenUri."
+    },
+    {
+      "name": "comment.avatar",
+      "type": "java.lang.String",
+      "description": "Description for comment.avatar."
+    }
+  ] }

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../static/css/me.css" th:href="@{/css/me.css}">
+    <title>分類管理</title>
+</head>
+<body>
+<!--Navbar-->
+<nav class="ui inverted attached segment m-padded-tb-mini">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">後台管理</h2>
+            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide"><i class="home icon"></i>前台</a>
+            <a href="#" th:href="@{/admin/blogs}" class="m-item item m-mobile-hide"><i class="home icon"></i>後台</a>
+            <a href="#" th:href="@{/admin/types}" class="active m-item item m-mobile-hide"><i class="idea icon"></i>分類</a>
+            <a href="#" th:href="@{/admin/tags}" class="m-item item m-mobile-hide"><i class="tags icon"></i>標籤</a>
+            <div class="right m-item m-mobile-hide menu">
+                <div class="ui dropdown item">
+                    <div class="text">
+                        <img class="ui avatar image" th:src="@{${session.user.avatar}}" alt="" src="">
+                    </div>
+                    <div th:text="${session.user.username}"></div>
+                    <i class="dropdown icon"> </i>
+                    <div class="menu">
+                        <a href="/logout" class="item">登出</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <a href="#" th:href="@{/admin/add/type}" class="teal item">新增</a>
+            <a href="#" th:href="@{/admin/types}"class="teal active item">列表</a>
+        </div>
+    </div>
+</div>
+<!--中間內容-->
+<div  class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
+            <i class="close icon"></i>
+            <p th:text="${message}">新增成功</p>
+        </div>
+        <table class="ui compact teal table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>名稱</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!--iterStat 狀態變數屬性有
+                index:當前疊代物件的index(從0開始計算)
+                count: 當前疊代物件的index(從1開始計算)
+                size:被疊代物件的大小
+                current:當前疊代變數
+                even/odd:布林值,當前迴圈是否是偶數/奇數(從0開始計算)
+                first:布林值,當前迴圈是否是第一個
+                last:布林值,當前迴圈是否是最後一個
+                從page.content拿到type;-->
+            <tr th:each="type,iterStat : ${page.content}">
+                <!--count: 當前疊代物件的index(從1開始計算)-->
+                <td th:text="${iterStat.count}"></td>
+                <td th:text="${type.typeName}"></td>
+                <td>
+                                                 <!--id=${type.id}替換{id} -->
+                    <a href="#" th:href="@{/admin/edit/{id}/type(id=${type.id})}" class="ui mini teal basic button">编辑</a>
+                    <a href="#" th:href="@{/admin/delete/{id}/type(id=${type.id})}" class="ui mini red basic button">删除</a>
+
+                </td>
+            </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th colspan="6">
+                                                            <!--如果page > 1才顯示-->
+                    <div class="ui mini pagination menu" th:if="${page.totalPages}>1">
+                                                                                            <!--unless=if相反 如果不是第一頁才顯示-->
+                        <a th:href="@{/admin/types(page=${page.number}-1)}" class="item" th:unless="${page.first}">上一頁</a>
+                        <a th:href="@{/admin/types(page=${page.number}+1)}" class="item" th:unless="${page.last}">下一頁</a>
+                    </div>
+                    <a href="#" th:href="@{/admin/add/type}" class="ui mini right floated teal basic button">新增</a>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.menu-toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-show');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on: 'hover'
+    });
+
+    //新增後訊息
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade');
+        });
+</script>
+</body>
+</html>

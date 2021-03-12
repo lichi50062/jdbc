@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="/css/me.css">
+    <title>註冊</title>
+</head>
+<body>
+<!--中間內容-->
+<div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
+    <div class="ui container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal image header">
+                    <div class="content">
+                        使用者註冊
+                    </div>
+                </h2>
+                <form class="ui large form" method="Post" action="/signup" th:object="${userRegisterVo}">
+                    <div class="ui segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="userName" id="userName" placeholder="請輸入註冊帳號" th:value="*{userName}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" name="userPassword" id="userPassword" placeholder="請輸入註冊密碼" th:value="*{userPassword}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="envelope icon"></i>
+                                <input type="email" name="email" id="email" placeholder="請輸入電子信箱" th:value="*{email}">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="id badge icon"></i>
+                                <input type="url" name="avatar" id="avatar" placeholder="請輸入大頭貼網址" value="https://source.unsplash.com/WLUHO9A_xik">
+                            </div>
+                        </div>
+                        <div class="ui error message"></div>
+                        <!--接收bindingResult-->
+                        <!--/*/
+                        <div class="ui negative message" th:if="${#fields.hasErrors('email')}"  >
+                          <i class="close icon"></i>
+                          <div class="header">驗證失敗</div>
+                          <p th:errors="*{email}">驗證不符</p>
+                        </div>
+                         /*/-->
+                        <!--unless=if的反意 -->
+                        <div class="ui mini negative message" th:unless="${#strings.isEmpty(errorMessage)}" th:text="${errorMessage}"></div>
+                        <div class="ui mini positive message" th:unless="${#strings.isEmpty(positiveMessage)}" th:text="${positiveMessage}"></div>
+                        <button class="ui fluid large teal submit button">註冊</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    // $('.ui.form')
+    //     .form({
+    //         fields: {
+    //             userName: {
+    //                 identifier: 'userName',
+    //                 rules: [
+    //                     {
+    //                         type: 'empty',
+    //                         prompt: '請輸入註冊帳號'
+    //                     }
+    //                 ]
+    //             },
+    //             userPassword: {
+    //                 identifier: 'userPassword',
+    //                 rules: [
+    //                     {
+    //                         type: 'empty',
+    //                         prompt: '請輸入註冊密碼'
+    //                     }
+    //                 ]
+    //             },
+    //             email: {
+    //                 identifier: 'email',
+    //                 rules: [
+    //                     {
+    //                         type: 'empty',
+    //                         prompt: '請輸入電子信箱'
+    //                     }
+    //                 ]
+    //             }
+    //         }
+    //     });
+</script>
+</body>
+</html>
