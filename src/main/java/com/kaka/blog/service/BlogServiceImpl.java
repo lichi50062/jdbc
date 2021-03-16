@@ -18,10 +18,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import javax.persistence.criteria.*;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
+import java.util.*;
 
 /**
  * @author Kaka
@@ -148,5 +146,20 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public void deleteBlog(Long id) {
         blogRepository.deleteById(id);
+    }
+
+    @Override
+    public Map<String, List<Blog>> archiveBlogList() {
+        Map<String, List<Blog>> map = new HashMap<>();
+        List<String> years = blogRepository.findGroupYear();
+        for (String year : years) {
+            map.put(year, blogRepository.findByYear(year));
+        }
+        return map;
+    }
+
+    @Override
+    public Long countBlogs() {
+        return blogRepository.count();
     }
 }

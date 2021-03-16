@@ -65,4 +65,20 @@ public interface BlogRepository extends JpaRepository<Blog, Long>, JpaSpecificat
      */
     @Query("select b from Blog b")
     List<Blog> findTop(Pageable pageable);
+
+    /**
+     * 查詢所有blog的年份
+     * @return
+     */
+    @Query("select function('date_format',b.updateTime,'%Y') as year from Blog b group by function('date_format',b.updateTime,'%Y') order by year")
+    List<String> findGroupYear();
+
+    /**
+     * 依據年分查詢所有blog
+     * @param year
+     * @return
+     */
+    @Query("select b from Blog b where function('date_format',b.updateTime,'%Y') = ?1")
+    List<Blog> findByYear(String year);
+
 }

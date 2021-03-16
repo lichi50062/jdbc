@@ -5,6 +5,7 @@ import com.kaka.blog.po.BlogQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -59,5 +60,17 @@ public interface BlogService {
     List<Blog> blogFindTop(Integer x);
 
     void deleteBlog(Long id);
+
+    /**
+     *依據年分取得所有blog
+     * @return
+     */
+    Map<String, List<Blog>> archiveBlogList();
+
+    /**
+     * 統計所有blog數量
+     * @return
+     */
+    Long countBlogs();
 
 }
