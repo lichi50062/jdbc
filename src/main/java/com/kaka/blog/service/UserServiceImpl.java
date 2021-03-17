@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
         user.setActiveCode(UUIDutils.getUUID());
         String activeCode = user.getActiveCode();
         String mailTitle = "blog信箱驗證";
-        String mailContent = "<a href=\"http://127.0.0.1:8080/checkCode?activeCode=" + activeCode + "\">驗證連結:" + activeCode + "</a>";
+        String mailContent = "<a href=\"https://kakablog.herokuapp.com/checkCode?activeCode=" + activeCode + "\">驗證連結:" + activeCode + "</a>";
         mailService.sendMail(vo.getEmail(), mailTitle, mailContent);
         user.setCreateTime(new Date());
         userRepository.save(user);
