@@ -39,7 +39,7 @@ public class Blog {
     private List<Tag> tags = new ArrayList<>();
     @ManyToOne
     private User user;
-    @OneToMany(mappedBy = "blog")
+    @OneToMany(mappedBy = "blog", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
     @Transient
     private Long typeId;
