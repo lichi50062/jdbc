@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(vo.getUserName());
         user.setEmail(vo.getEmail());
+        user.setAvatar(vo.getAvatar());
         //密碼加鹽
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encode = passwordEncoder.encode(vo.getUserPassword());
