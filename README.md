@@ -1,5 +1,5 @@
 # blog
-這是一個基於Spring Boot + Spring Data JPA + Thymeleaf  + MySQL等技術的部落格。
+一個基於Spring Boot + Spring Data JPA + Thymeleaf  + MySQL等技術的部落格。
 
 包含前後台管理、留言功能、信箱驗證。
 * 後端
