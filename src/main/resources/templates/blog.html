@@ -81,7 +81,7 @@ public static void main(String[] args) {
             <!--標籤-->
             <div class="m-padded-tb-lr-responsive">
                 <div class="ui basic teal label left pointing" th:each="tag : ${blog.tags}" >
-                    <a th:href="@{/tag/{id}(id=${tag.id})}" th:text="${tag.tagName}"></a>
+                    <a th:href="@{/tags/{id}(id=${tag.id})}" th:text="${tag.tagName}"></a>
                 </div>
             </div>
         </div>
