@@ -1,0 +1,90 @@
+package com.ubot.lis.function.api5;
+
+import com.ubot.lis.utils5.CurrencyUtil;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.Map;
+
+public class S110010002 {
+
+    private final S110ServiceImpl service = new S110ServiceImpl();
+
+    public JSONArray mainS110010002(String queryAcc) {
+        Map<String, JSONObject> outboundMap = service.sendToHQ00952A01(queryAcc);
+        JSONArray returnJsonArray = new JSONArray();
+        if (!outboundMap.get("outbound").getJSONObject("result").getJSONObject("data").has("T9H2")) {
+            returnJsonArray.put("");
+        } else {
+            JSONArray t9H2JsonArray = outboundMap.get("outbound").getJSONObject("result").getJSONObject("data").getJSONArray("T9H2");
+            for (int i = 0; i < t9H2JsonArray.length(); i++) {
+                JSONObject obj = new JSONObject();
+                String account = (String) t9H2JsonArray.getJSONObject(i).get("Account");
+                String accountType = account.substring(3, 5);
+                String openDate = (String) t9H2JsonArray.getJSONObject(i).get("OpenDate");
+                obj.put("Account", account);
+                obj.put("OpenDate", openDate);
+                if ("10".equals(accountType) || "20".equals(accountType) || "50".equals(accountType) || "51".equals(accountType) || "66".equals(accountType)) {
+                    obj.put("AccountType", "台幣活期存款");
+                    obj.put("Currency", "台幣");
+//              HQ00103290
+                    obj.put("SixMonAVG", "六月平均");
+                    obj.put("Balance", "查詢日餘額");
+//                HQ00103021
+                    obj.put("IncidentData", "事故資料");
+                    obj.put("Pledge", "N/A");
+                }
+                if ("30".equals(accountType)) {
+                    obj.put("AccountType", "台幣支票存款");
+                    obj.put("Currency", "台幣");
+//               缺少電文303-2
+                    obj.put("SixMonAVG", "六月平均");
+                    obj.put("Balance", "查詢日餘額");
+                    obj.put("IncidentData", "事故資料");
+                    obj.put("Pledge", "Pledge");
+                }
+                if ("40".equals(accountType)) {
+                    obj.put("AccountType", "台幣定期存款");
+                    obj.put("Currency", "台幣");
+//              203-10
+                    obj.put("Balance", "查詢日餘額");
+//                2038
+                    obj.put("Pledge", "質權人");
+//              HQ00203W00
+                    obj.put("IncidentData", "事故資料");
+                    obj.put("SixMonAVG", "SixMonAVG");
+                }
+                if ("77".equals(accountType)) {
+//               缺少電文203-01，2038
+//               查詢六個月平均餘額
+                    Map<String, JSONObject> hQ00A07500Outbound = service.sendToHQ00A07500(account);
+                    String sixMonAVG = hQ00A07500Outbound.get("outbound").getJSONObject("result").getJSONObject("data")
+                            .getJSONArray("TA95").getJSONObject(0).get("AvgBalanceF").toString();
+
+//                查詢日餘額
+                    String balance = hQ00A07500Outbound.get("outbound").getJSONObject("result").getJSONObject("data")
+                            .getJSONArray("TA95").getJSONObject(0).get("BalanceF_1").toString();
+
+                    obj.put("AccountType", "外幣活期");
+                    obj.put("Currency", "等值美金");
+                    obj.put("SixMonAVG", sixMonAVG);
+                    obj.put("Balance", balance);
+                    obj.put("Pledge", "N/A");
+                }
+                if ("88".equals(accountType)) {
+//                缺少電文203-01，2038
+                    CurrencyUtil currencyUtil = new CurrencyUtil();
+                    Map<String, JSONObject> hQ00B03200Outbound = service.sendToHQ00B03200(account);
+
+                    obj.put("AccountType", "外幣定期");
+                    obj.put("Currency", "");
+                    obj.put("SixMonAVG", "N/A");
+                    obj.put("Currency", currencyUtil.currencySwitch(hQ00B03200Outbound));
+                }
+                returnJsonArray.put(obj);
+            }
+        }
+        System.out.println("returnJsonArray : " + returnJsonArray);
+        return returnJsonArray;
+    }
+}

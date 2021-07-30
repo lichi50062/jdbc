@@ -1,0 +1,86 @@
+{
+  "msg": "",
+  "rc2": "M000",
+  "result": {
+    "data": {
+      "Msg": "",
+      "TxnTerID": "935AV",
+      "TxnLength": "00718",
+      "T9H2": [
+        {
+          "Account": "037201006061",
+          "ResponseCode": "0000",
+          "type2": "00",
+          "EaiFlag": "1",
+          "AvailableBal": "       2,299,704",
+          "OpenDate": "01001006",
+          "CompanyEaiFlag": " ",
+          "type1": "9",
+          "Filler8": "2002037 ",
+          "AccountBal": "       2,299,704",
+          "LTxnDate": "00000000",
+          "OdBal": "                ",
+          "Filler57": "                                                         "
+        },
+        {
+          "Account": "037408070639",
+          "ResponseCode": "0000",
+          "type2": "  ",
+          "EaiFlag": "0",
+          "AvailableBal": "         700,000",
+          "OpenDate": "01081004",
+          "CompanyEaiFlag": " ",
+          "type1": "0",
+          "Filler8": "4000037 ",
+          "AccountBal": "         700,000",
+          "LTxnDate": "        ",
+          "OdBal": "                ",
+          "Filler57": "0                                                        "
+        },
+        {
+          "Account": "037508067211",
+          "ResponseCode": "0000",
+          "type2": "00",
+          "EaiFlag": "1",
+          "AvailableBal": "           9,274",
+          "OpenDate": "01081004",
+          "CompanyEaiFlag": " ",
+          "type1": "9",
+          "Filler8": "50300370",
+          "AccountBal": "           9,274",
+          "LTxnDate": "00000000",
+          "OdBal": "                ",
+          "Filler57": "                                                         "
+        },
+        {
+          "Account": "051500018058",
+          "ResponseCode": "0000",
+          "type2": "00",
+          "EaiFlag": "1",
+          "AvailableBal": "         119,994",
+          "OpenDate": "01001007",
+          "CompanyEaiFlag": " ",
+          "type1": "9",
+          "Filler8": "5008051 ",
+          "AccountBal": "         119,994",
+          "LTxnDate": "00000000",
+          "OdBal": "                ",
+          "Filler57": "                                                         "
+        }
+      ],
+      "T9H1": {
+        "DebitConsult": "              ",
+        "ResponseCode": "0000",
+        "CustName40": " 我我我                                 ",
+        "PID": "F126365897A"
+      }
+    },
+    "txn": "HQ00952A01"
+  },
+  "rc": "M000",
+  "msg2": ""
+}
+
+
+
+

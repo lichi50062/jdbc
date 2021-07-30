@@ -1,0 +1,65 @@
+package com.ubot.lis.function.api5;
+
+import com.ubot.lis.utils5.CheckID;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+@Path("/S110010001")
+public class S110010001 {
+
+    private static final Logger log = (Logger) LogManager.getLogger(S110010001.class);
+    private String rc = "M0000";
+
+    @Context
+    HttpServletRequest req;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON + " ;charset=UTF-8")
+    @Produces(MediaType.APPLICATION_JSON + " ;charset=UTF-8")
+    public Response proc(String jsonStr) {
+        log.info("queryHQ00952A01...");
+        log.info("jsonStr: " + jsonStr);
+
+        JSONObject reqObj = new JSONObject(jsonStr);
+
+        try {
+            new CheckID().checkID(reqObj.getString("idNumber"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            rc = "M9995";
+        }
+
+        JSONArray arrayObj = new JSONArray();
+        if ("M0000".equals(rc)) {
+            // 主要程式 doJob
+            arrayObj = doJob(reqObj.getString("idNumber") + "A");
+        }
+
+        JSONObject jsonOut = new JSONObject();
+        //執行後端的輸出結果
+        if (arrayObj == null) {
+            jsonOut.put("result", "");
+        } else {
+            System.out.println("arrayObj" + arrayObj);
+            jsonOut.put("result", arrayObj);
+        }
+        System.out.println("jsonOut : " + jsonOut);
+        return Response.status(200).entity(jsonOut.toString()).build();
+    }
+
+    public JSONArray doJob(String idNumber) {
+        return new S110010002().mainS110010002(idNumber);
+    }
+}
+
+

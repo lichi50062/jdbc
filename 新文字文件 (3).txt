@@ -1,0 +1,74 @@
+package com.ubot.lis.function.api5;
+
+import com.ubot.lis.utils5.CurrencyUtil;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class S110010003 {
+
+    private final S110ServiceImpl service = new S110ServiceImpl();
+
+    public JSONArray mainS110010003(String queryAcc) {
+        Map<String, JSONObject> hQ00952A01outboundMap = service.sendToHQ00952A01(queryAcc);
+        Map<String, JSONObject> hQ00603938outboundMap;
+        JSONArray returnJsonArray = new JSONArray();
+        //帳號
+        String account;
+        //授信號碼List
+        List<String> grantSignalCodeList = new ArrayList<>();
+        //key帳號 value授信號碼
+        Map<String, List<String>> map = new HashMap<>();
+
+        if (!hQ00952A01outboundMap.get("outbound").getJSONObject("result").getJSONObject("data").has("T9H3")) {
+            return returnJsonArray.put("沒有T9H3");
+        } else {
+            JSONArray t9H3JsonArray = hQ00952A01outboundMap.get("outbound").getJSONObject("result").getJSONObject("data").getJSONArray("T9H3");
+            for (int i = 0; i < t9H3JsonArray.length(); i++) {
+                //取得610-90帳號
+                account = (String) t9H3JsonArray.getJSONObject(i).get("Account");
+                //取得授信號碼
+                String grantSignalCode = (String) t9H3JsonArray.getJSONObject(i).get("GrantSignalCode");
+                grantSignalCodeList.add(grantSignalCode);
+                map.put(account, grantSignalCodeList);
+
+                hQ00603938outboundMap = service.sendToHQ00603938(account);
+                //初貸金額
+                String crAmt1 = (String) hQ00603938outboundMap.get("outbound").getJSONObject("data").getJSONArray("T906").getJSONObject(0).get("CrAmt1");
+                //現欠金額
+                String crAmt2 = (String) hQ00603938outboundMap.get("outbound").getJSONObject("data").getJSONArray("T906").getJSONObject(0).get("CrAmt2");
+                //利(費)率
+                String crRate = (String) hQ00603938outboundMap.get("outbound").getJSONObject("data").getJSONArray("T906").getJSONObject(0).get("CrRate");
+                //初貸日
+                String crDate1 = (String) hQ00603938outboundMap.get("outbound").getJSONObject("data").getJSONArray("T906").getJSONObject(0).get("CrDate1");
+                //到期日
+                String crDate2 = (String) hQ00603938outboundMap.get("outbound").getJSONObject("data").getJSONArray("T906").getJSONObject(0).get("CrDate2");
+                //訖息日
+                String crDate3 = (String) hQ00603938outboundMap.get("outbound").getJSONObject("data").getJSONArray("T906").getJSONObject(0).get("CrDate3");
+
+
+            }
+        }
+        return returnJsonArray;
+    }
+
+//    private JSONArray returnData(String idNumber){
+//        JSONArray result = null;
+//        // do TX
+//        JSONObject data = new JSONObject();
+//        result = returnData(data, idNumber);
+//        return result;
+//    }
+//
+//    private JSONArray returnData(JSONObject data, String idNumber) {
+//        {
+//            // data access
+//            JSONArray result = null;
+//            return result;
+//        }
+//    }
+}
